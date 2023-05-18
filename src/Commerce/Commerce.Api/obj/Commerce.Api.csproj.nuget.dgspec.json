@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\lya-commerce\\Commerce\\Commerce.Api\\Commerce.Api.csproj": {}
+    "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj": {}
   },
   "projects": {
-    "C:\\lya-commerce\\Commerce\\Commerce.Api\\Commerce.Api.csproj": {
+    "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\lya-commerce\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
+        "projectUniqueName": "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
         "projectName": "Commerce.Api",
-        "projectPath": "C:\\lya-commerce\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
+        "projectPath": "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
         "packagesPath": "C:\\Users\\victor\\.nuget\\packages\\",
-        "outputPath": "C:\\lya-commerce\\Commerce\\Commerce.Api\\obj\\",
+        "outputPath": "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\victor\\AppData\\Roaming\\NuGet\\NuGet.Config"
