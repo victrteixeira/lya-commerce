@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Core", "Commerce.Core\Commerce.Core.csproj", "{2BF6A40D-51E3-40C9-BEDE-D849EA8A8254}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Api", "Commerce.Api\Commerce.Api.csproj", "{2BF6A40D-51E3-40C9-BEDE-D849EA8A8254}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
