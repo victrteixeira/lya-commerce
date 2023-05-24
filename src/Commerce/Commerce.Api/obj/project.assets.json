@@ -224,24 +224,30 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\victor\\.nuget\\packages\\": {}
+    "C:\\Users\\ian\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
+      "projectUniqueName": "C:\\Users\\ian\\source\\repos\\lya-commerce\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
       "projectName": "Commerce.Api",
-      "projectPath": "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
-      "packagesPath": "C:\\Users\\victor\\.nuget\\packages\\",
-      "outputPath": "C:\\lya-commerce\\src\\Commerce\\Commerce.Api\\obj\\",
+      "projectPath": "C:\\Users\\ian\\source\\repos\\lya-commerce\\lya-commerce\\src\\Commerce\\Commerce.Api\\Commerce.Api.csproj",
+      "packagesPath": "C:\\Users\\ian\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ian\\source\\repos\\lya-commerce\\lya-commerce\\src\\Commerce\\Commerce.Api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\victor\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\ian\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
