@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Security", "Commer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.IoC", "Commerce.IoC\Commerce.IoC.csproj", "{24B6F089-C857-4756-AFA2-4D7CEB9A56C1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "projects", "projects", "{0303A68D-ACDF-47AF-9865-D221491EC060}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4796BDB3-438B-4C31-AD35-731DE56EEE77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,5 +43,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77D74319-165E-4400-90F6-79A0BC26C7D5}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2BF6A40D-51E3-40C9-BEDE-D849EA8A8254} = {0303A68D-ACDF-47AF-9865-D221491EC060}
+		{B6E8832F-4596-402A-A0E9-FF5C673AAFA5} = {0303A68D-ACDF-47AF-9865-D221491EC060}
+		{24B6F089-C857-4756-AFA2-4D7CEB9A56C1} = {0303A68D-ACDF-47AF-9865-D221491EC060}
+		{7581A804-0596-40F9-A0EC-295AB1B4096A} = {0303A68D-ACDF-47AF-9865-D221491EC060}
 	EndGlobalSection
 EndGlobal
