@@ -48,7 +48,7 @@ public class UserValidator : AbstractValidator<User>
                 bool isValid = pwd.Any(char.IsUpper)
                                && pwd.Any(char.IsLower)
                                && pwd.Any(char.IsDigit)
-                               && pwd.Contains(' ')
+                               //&& pwd.Contains(' ')
                                && pwd.Length >= 8;
                 
                 if (!isValid)
