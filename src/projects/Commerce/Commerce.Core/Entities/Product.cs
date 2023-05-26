@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Commerce.Core.Validations;
+using FluentValidation;
 
 namespace Commerce.Core.Entities
 {
     public class Product
     {
-        public Product(int id, string name, string description, decimal price, string category, string? manufacturer = null, string? subcategory = null) { 
+        public Product(int id, string name, string description, decimal price, string category, string? manufacturer, string? subcategory) { 
             Id = id;
             Name = name;
             Description = description;
@@ -28,6 +29,6 @@ namespace Commerce.Core.Entities
         public string Category { get; }
         public string? SubCategory { get; }
 
-        public bool Validate() => new ProductValidator().Validate(this).IsValid;
+        public void Validate() => new ProductValidator().ValidateAndThrow(this);
     }
 }
