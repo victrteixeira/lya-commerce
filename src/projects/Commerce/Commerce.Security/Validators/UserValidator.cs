@@ -41,18 +41,5 @@ public class UserValidator : AbstractValidator<User>
                     context.AddFailure("O email não é válido.");
                 }
             });
-
-        RuleFor(x => x.Password)
-            .Custom((pwd, context) =>
-            {
-                bool isValid = pwd.Any(char.IsUpper)
-                               && pwd.Any(char.IsLower)
-                               && pwd.Any(char.IsDigit)
-                               //&& pwd.Contains(' ')
-                               && pwd.Length >= 8;
-                
-                if (!isValid)
-                    context.AddFailure("Senha não é válida. Precisa conter ao menos uma letra maiúscula, uma minúscula, um digito númerico, e precisa ser maior ou igual a 8 digitos.");
-            });
     }
 }

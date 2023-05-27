@@ -8,7 +8,11 @@ public class AuthMapper : Profile
 {
     public AuthMapper()
     {
-        CreateMap<CreateUser, User>();
+        CreateMap<CreateUser, User>()
+            .ConstructUsing(src => new User(src.FirstName, src.LastName, src.Email, src.Password))
+            .ForMember(dest => dest.EmailAddress,
+                opt => opt.MapFrom(src => src.Email));
+        
         CreateMap<User, ReadUser>()
             .ConstructUsing(x => new ReadUser(x.FirstName, x.LastName));
     }
