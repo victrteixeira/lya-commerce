@@ -8,6 +8,7 @@ public interface ISecurityRepository
 {
     Task<IReadOnlyCollection<User>> GetAllUsers();
     Task<User?> GetSingleUserAsync(string id);
+    Task<User?> GetSingleUserByEmailAsync(string email);
     Task AddUserAsync(User newUser);
     Task UpdateUserAsync(string id, User updatedUser);
     Task DeleteUserAsync(string id);
