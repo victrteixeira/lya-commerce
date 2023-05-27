@@ -10,7 +10,7 @@ namespace Commerce.Core.Entities
 {
     public class Product
     {
-        public Product(int id, string name, string description, decimal price, string category, string? manufacturer, string? subcategory) { 
+        public Product(int id, string name, string description, decimal price, string category, string? manufacturer = null, string? subcategory = null) { 
             Id = id;
             Name = name;
             Description = description;

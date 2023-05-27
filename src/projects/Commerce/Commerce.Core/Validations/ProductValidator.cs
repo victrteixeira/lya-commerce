@@ -28,6 +28,7 @@ namespace Commerce.Core.Validations
                 .PrecisionScale(5, 2, true).WithMessage("O preço do produto não deve ultrapassar 3 dígitos.");
             RuleFor(x => x.Manufacturer)
                 .NotEmpty().WithMessage("A marca do produto não deve ser vazia.");
+            //TODO caso nulo, ok, caso tenha algo, validações padrão;
             RuleFor(x => x.Category)
                 .NotEmpty().WithMessage("A categoria do produto não deve ser vazia.")
                 .NotNull().WithMessage("A categoria do produto não deve ser nula.")
@@ -36,6 +37,7 @@ namespace Commerce.Core.Validations
                 .NotEmpty().WithMessage("A sub-categoria do produto não deve ser vazia.")
                 .NotNull().WithMessage("A sub-categoria do produto não deve ser nula.")
                 .MaximumLength(20).WithMessage("A sub-categoria do produto não deve ultrapassar 20 caracteres.");
+            //TODO caso nulo, ok, caso tenha algo, validações padrão;
         }
     }
 }
