@@ -1,3 +1,4 @@
+using Commerce.Api.Middleware;
 using Commerce.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,5 +21,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.Run();
