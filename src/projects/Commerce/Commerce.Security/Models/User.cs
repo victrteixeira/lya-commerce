@@ -1,25 +1,29 @@
-﻿using Commerce.Security.Validators;
+﻿using System.Security.Cryptography;
+using Commerce.Security.Validators;
+using FluentValidation;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Commerce.Security.Models;
 
-public class User : Base
+public class User
 {
-    public int Id { get; set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
-    public string EmailAddress { get; private set; }
-    public string Password { get; private set; }
-    public string HashedPassword { get; private set; }
-
-    private void ValidateUser() => base.Validate(new UserValidator(), this);
-
-    public User(string firstname, string lastname, string emailAddress, string password)
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; private set; }
+    public string FirstName { get; }
+    public string LastName { get; }
+    public string EmailAddress { get; }
+    public string HashedPassword { get; }
+    
+    public User(string firstname, string lastname, string emailAddress, string hashedPassword)
     {
         FirstName = firstname;
         LastName = lastname;
         EmailAddress = emailAddress;
-        Password = password.Trim();
+        HashedPassword = hashedPassword;
         ValidateUser();
-        HashedPassword = EncryptPassword(password);
     }
+    
+    private void ValidateUser() => new UserValidator().ValidateAndThrow(this);
 }
