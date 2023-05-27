@@ -22,20 +22,32 @@ namespace Commerce.Core.Validations
                 .NotEmpty().WithMessage("A descrição do produto não deve ser vazia.")
                 .NotNull().WithMessage("A descrição do produto não deve ser nula.")
                 .MaximumLength(120).WithMessage("A descrição do produto não deve ultrapassar 120 caracteres.");
-            RuleFor(x => x.Price).NotEmpty()
-                .WithMessage("O preço do produto não deve ser vazio.")
+            RuleFor(x => x.Price)
+                .NotEmpty().WithMessage("O preço do produto não deve ser vazio.")
                 .NotNull().WithMessage("O preço do produto não deve ser nulo.")
                 .PrecisionScale(5, 2, true).WithMessage("O preço do produto não deve ultrapassar 3 dígitos.");
             RuleFor(x => x.Manufacturer)
-                .NotEmpty().WithMessage("A marca do produto não deve ser vazia.");
+                .Custom((manufacturer, context) =>
+                {
+                    if (manufacturer != null && manufacturer.Length > 20)
+                    {
+                        context.AddFailure("A fabricante do produto não deve ultrapassar 20 caracteres.");
+                    }
+                } );
+            //TODO refactor when not null check if > 20 characters;
             RuleFor(x => x.Category)
                 .NotEmpty().WithMessage("A categoria do produto não deve ser vazia.")
                 .NotNull().WithMessage("A categoria do produto não deve ser nula.")
                 .MaximumLength(20).WithMessage("A categoria do produto não deve ultrapassar 20 caracteres.");
             RuleFor(x => x.SubCategory)
-                .NotEmpty().WithMessage("A sub-categoria do produto não deve ser vazia.")
-                .NotNull().WithMessage("A sub-categoria do produto não deve ser nula.")
-                .MaximumLength(20).WithMessage("A sub-categoria do produto não deve ultrapassar 20 caracteres.");
+                .Custom((subCategory, context) =>
+                {
+                    if (subCategory != null && subCategory.Length > 20)
+                    {
+                        context.AddFailure("A sub categoria do produto não deve ultrapassar 20 caracteres.");
+                    }
+                } );
+            //TODO refactor when not null check if > 20 characters;
         }
     }
 }
