@@ -16,7 +16,8 @@ public class PasswordService : IPasswordService
     public async Task<string> EncryptPassword(string input)
     {
         byte[] salt = new byte[SaltSize];
-        await Task.Run(() => RandomNumberGenerator.GetBytes(SaltSize));
+        using var rng = RandomNumberGenerator.Create();
+        await Task.Run(() => rng.GetBytes(salt));
 
         byte[]? hash = null;
         await Task.Run(() => hash = Rfc2898DeriveBytes.Pbkdf2(input, salt, Iterations, Algorithm, KeySize));
