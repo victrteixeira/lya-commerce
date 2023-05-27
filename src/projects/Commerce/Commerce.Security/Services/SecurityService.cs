@@ -38,8 +38,18 @@ public class SecurityService : ISecurityService
         return _mapper.Map<ReadUser>(newUser);
     }
 
-    public async Task<bool> LoginAsync(LoginUser command)
+    public async Task<ReadUser?> LoginAsync(LoginUser command)
     {
-        throw new NotImplementedException();
+        var user = await _repository.GetSingleUserByEmailAsync(command.Email);
+        
+        if (user == null)
+            throw new LoginException("Usuário não encontrado para esta e-mail, tente realizar um cadastro.");
+
+        var pwdEqual = _pwdService.VerifyHash(command.Password, user.HashedPassword);
+
+        if (!pwdEqual)
+            throw new InvalidPasswordException("E-mail ou Senha incorretos.");
+
+        return _mapper.Map<ReadUser>(user);
     }
 }
