@@ -1,6 +1,7 @@
 ﻿using Commerce.Security.Database;
 using Commerce.Security.Interfaces;
 using Commerce.Security.Repository;
+using Commerce.Security.Services;
 using Commerce.Security.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,8 @@ public static class Container
             configuration.GetSection("MongoDatabaseConfig"));
 
         services.AddScoped<ISecurityRepository, SecurityRepository>();
+        services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<ISecurityService, SecurityService>();
         
         services.AddAutoMapper(typeof(AuthMapper));
         return services;
