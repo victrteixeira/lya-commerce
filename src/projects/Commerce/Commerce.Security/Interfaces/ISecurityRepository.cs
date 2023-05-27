@@ -7,8 +7,8 @@ namespace Commerce.Security.Interfaces;
 public interface ISecurityRepository
 {
     Task<IReadOnlyCollection<User>> GetAllUsers();
-    Task<User?> GetSingleUserAsync(int id); // TODO -> Check out whether this will stay as integer.
+    Task<User?> GetSingleUserAsync(string id);
     Task AddUserAsync(User newUser);
-    Task UpdateUserAsync(int id, User updatedUser);
-    Task DeleteUserAsync(int id);
+    Task UpdateUserAsync(string id, User updatedUser);
+    Task DeleteUserAsync(string id);
 }
