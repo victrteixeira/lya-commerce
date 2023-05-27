@@ -30,6 +30,9 @@ public class SecurityRepository : ISecurityRepository
     public async Task<User?> GetSingleUserAsync(string id) =>
         await _userCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+    public async Task<User?> GetSingleUserByEmailAsync(string email) =>
+        await _userCollection.Find(x => x.EmailAddress == email).FirstOrDefaultAsync();
+
     public async Task AddUserAsync(User newUser) =>
         await _userCollection.InsertOneAsync(newUser);
 
