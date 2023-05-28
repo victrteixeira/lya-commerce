@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Commerce.Core\Commerce.Core.csproj" />
+      <ProjectReference Include="..\Commerce.Infrastructure\Commerce.Infrastructure.csproj" />
       <ProjectReference Include="..\Commerce.Security\Commerce.Security.csproj" />
     </ItemGroup>
 
