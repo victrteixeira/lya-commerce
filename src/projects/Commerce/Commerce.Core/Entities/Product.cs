@@ -8,10 +8,13 @@ using FluentValidation;
 
 namespace Commerce.Core.Entities
 {
-    public class Product
+    public class Product : Base
     {
-        public Product(int id, string name, string description, decimal price, string category, string? manufacturer = null, string? subcategory = null) { 
-            Id = id;
+        protected Product()
+        {
+        }
+        
+        public Product(string name, string description, decimal price, string category, string? manufacturer = null, string? subcategory = null) {
             Name = name;
             Description = description;
             Price = price;
@@ -20,8 +23,7 @@ namespace Commerce.Core.Entities
             Manufacturer = manufacturer;
             Validate();
         }
-
-        public int Id { get; private set; }
+        
         public string Name { get; }
         public string Description { get; }
         public decimal Price { get; }
@@ -30,5 +32,6 @@ namespace Commerce.Core.Entities
         public string? SubCategory { get; }
 
         public void Validate() => new ProductValidator().ValidateAndThrow(this);
+        //TODO generalize Validate method to all classes
     }
 }

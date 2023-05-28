@@ -11,9 +11,6 @@ namespace Commerce.Core.Validations
     public class ProductValidator : AbstractValidator<Product>
     {
         public ProductValidator() {
-            RuleFor(x => x.Id).NotEmpty()
-                .WithMessage("O Id do produto não deve ser vazio.")
-                .NotNull().WithMessage("O Id do produto não deve ser nulo.");
             RuleFor(x => x.Name).NotEmpty()
                 .WithMessage("O nome do produto não deve ser vazio.")
                 .NotNull().WithMessage("O nome do produto não deve ser nulo.")
