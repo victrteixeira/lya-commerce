@@ -15,10 +15,10 @@ namespace Commerce.Tests.Core
             //act
             Action res = () =>
             {
-                Product product = new Product(1, name, "a", 1, "a");
+                Product product = new Product(name, "a", 1, "a");
             };
             //assert
-            res.Should().Throw<ValidationException>().WithMessage("O nome do produto não deve ultrapassar 50 caracteres.");
+            res.Should().Throw<ValidationException>().WithMessage("O nome do produto nï¿½o deve ultrapassar 50 caracteres.");
         }
     }
 }
