@@ -28,6 +28,11 @@ public class SecurityService : ISecurityService
             throw new InvalidPasswordException("Senha não é válida. Precisa conter ao menos" +
                                                " uma letra maiúscula, uma minúscula, um digito númerico," +
                                                " e precisa ser maior ou igual a 8 digitos.");
+
+        var userExist = await _repository.GetSingleUserByEmailAsync(command.Email);
+
+        if (userExist != null)
+            throw new InvalidOperationException("Um usuário com este e-mail já existe.");
         
         command.Password = await _pwdService.EncryptPassword(command.Password);
         
@@ -43,12 +48,12 @@ public class SecurityService : ISecurityService
         var user = await _repository.GetSingleUserByEmailAsync(command.Email);
         
         if (user == null)
-            throw new LoginException("Usuário não encontrado para esta e-mail, tente realizar um cadastro.");
+            throw new KeyNotFoundException("Usuário não encontrado para esta e-mail, tente realizar um cadastro.");
 
         var pwdEqual = _pwdService.VerifyHash(command.Password, user.HashedPassword);
 
         if (!pwdEqual)
-            throw new InvalidPasswordException("E-mail ou Senha incorretos.");
+            throw new UnauthorizedAccessException("E-mail ou Senha incorretos.");
 
         return _mapper.Map<ReadUser>(user);
     }

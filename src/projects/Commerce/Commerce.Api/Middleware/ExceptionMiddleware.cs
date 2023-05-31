@@ -43,8 +43,14 @@ public class ExceptionMiddleware
             case InvalidPasswordException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
                 break;
-            case LoginException:
+            case InvalidOperationException:
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case KeyNotFoundException:
                 response.StatusCode = (int)HttpStatusCode.NotFound;
+                break;
+            case UnauthorizedAccessException:
+                response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 break;
             default:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
