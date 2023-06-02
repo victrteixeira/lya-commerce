@@ -11,12 +11,14 @@ public class SecurityService : ISecurityService
     private readonly IMapper _mapper;
     private readonly ISecurityRepository _repository;
     private readonly IPasswordService _pwdService;
+    private readonly ITokenRequest _tokenRequest;
 
-    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService)
+    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenRequest tokenRequest)
     {
         _mapper = mapper;
         _repository = repository;
         _pwdService = pwdService;
+        _tokenRequest = tokenRequest;
     }
 
     public async Task<ReadUser?> RegisterAsync(CreateUser command)
@@ -43,7 +45,7 @@ public class SecurityService : ISecurityService
         return _mapper.Map<ReadUser>(newUser);
     }
 
-    public async Task<ReadUser?> LoginAsync(LoginUser command)
+    public async Task<string?> LoginAsync(LoginUser command)
     {
         var user = await _repository.GetSingleUserByEmailAsync(command.Email);
         
@@ -55,6 +57,6 @@ public class SecurityService : ISecurityService
         if (!pwdEqual)
             throw new UnauthorizedAccessException("E-mail ou Senha incorretos.");
 
-        return _mapper.Map<ReadUser>(user);
+        return _tokenRequest.GenerateToken(user);
     }
 }
