@@ -26,7 +26,7 @@ public static class Container
         services.AddScoped<ISecurityRepository, SecurityRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<ISecurityService, SecurityService>();
-        services.AddScoped<ITokenRequest, TokenRequest>();
+        services.AddScoped<ITokenService, TokenService>();
 
         services.AddAuthentication(opt =>
         {

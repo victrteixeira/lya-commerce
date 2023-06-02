@@ -11,9 +11,9 @@ public class SecurityService : ISecurityService
     private readonly IMapper _mapper;
     private readonly ISecurityRepository _repository;
     private readonly IPasswordService _pwdService;
-    private readonly ITokenRequest _tokenRequest;
+    private readonly ITokenService _tokenRequest;
 
-    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenRequest tokenRequest)
+    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenService tokenRequest)
     {
         _mapper = mapper;
         _repository = repository;
