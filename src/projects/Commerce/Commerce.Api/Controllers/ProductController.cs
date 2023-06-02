@@ -1,5 +1,6 @@
 ﻿using Commerce.Core.Entities;
 using Commerce.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Api.Controllers;
@@ -13,6 +14,7 @@ public class ProductController : ControllerBase
     public ProductController(IProductRepository repo) => _repo = repo;
 
     [HttpPost]
+    [Authorize]
     [Route("add")]
     public async Task<IActionResult> Add([FromBody] Product product)
     {

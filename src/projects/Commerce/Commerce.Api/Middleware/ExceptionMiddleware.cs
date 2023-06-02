@@ -52,6 +52,9 @@ public class ExceptionMiddleware
             case UnauthorizedAccessException:
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 break;
+            case InvalidTokenException:
+                response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                break;
             default:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 break;

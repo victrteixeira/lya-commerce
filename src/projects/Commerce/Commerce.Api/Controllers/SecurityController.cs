@@ -1,6 +1,7 @@
 ﻿using Commerce.Api.Utils;
 using Commerce.Security.DTOs;
 using Commerce.Security.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Api.Controllers;
@@ -14,6 +15,7 @@ public class SecurityController : ControllerBase
     public SecurityController(ISecurityService service) => _service = service;
 
     [HttpPost]
+    [AllowAnonymous]
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] CreateUser command)
     {
@@ -24,12 +26,13 @@ public class SecurityController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginUser command)
     {
         var response = await _service.LoginAsync(command);
         var apiResponse =
-            ApiResponse<ReadUser>.Success(response, $"{response.FirstName} {response.LastName}, bem-vindo!");
+            ApiResponse<string>.Success(response, "Login bem-sucedido.");
         return Ok(apiResponse);
     }
 }
