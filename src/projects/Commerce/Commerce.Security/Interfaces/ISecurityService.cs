@@ -7,4 +7,5 @@ public interface ISecurityService
     Task<ReadUser?> RegisterAsync(CreateUser command);
     Task<ReadUser> RegisterAdminAsync(CreateUser command);
     Task<string?> LoginAsync(LoginUser command);
+    Task<bool> ChangePasswordAsync(ChangePasswordUser command);
 }
