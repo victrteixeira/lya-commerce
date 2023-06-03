@@ -3,6 +3,7 @@ using System.Text.Json;
 using Commerce.Api.Utils;
 using Commerce.Security.Utils;
 using FluentValidation;
+using SharpCompress.Common;
 
 namespace Commerce.Api.Middleware;
 
@@ -52,7 +53,13 @@ public class ExceptionMiddleware
             case UnauthorizedAccessException:
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 break;
+            case ArgumentNullException:
+                response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                break;
             case InvalidTokenException:
+                response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                break;
+            case CryptographicException:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 break;
             default:

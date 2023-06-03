@@ -46,4 +46,15 @@ public class SecurityController : ControllerBase
             ApiResponse<string>.Success(response, "Login bem-sucedido.");
         return Ok(apiResponse);
     }
+
+    [HttpPost]
+    [Authorize(Roles = "User,Admin,Developer")]
+    [Route("changePassword")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUser command)
+    {
+        await _service.ChangePasswordAsync(command);
+        var apiResponse =
+            ApiResponse<string>.Success(null, "Senha atualizada com sucesso.");
+        return Ok(apiResponse);
+    }
 }
