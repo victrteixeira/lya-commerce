@@ -45,6 +45,26 @@ public class SecurityService : ISecurityService
         return _mapper.Map<ReadUser>(newUser);
     }
 
+    public async Task<ReadUser> RegisterAdminAsync(CreateUser command)
+    {
+        var userExist = await _repository.GetSingleUserByEmailAsync(command.Email);
+        
+        if (userExist != null)
+            throw new InvalidOperationException("Um usuário com este e-mail já existe.");
+
+        command.Password = await _pwdService.EncryptPassword(command.Password);
+
+        var newAdmin = _mapper.Map<User>(command);
+        newAdmin.UpdateRole("Admin");
+
+        if (!newAdmin.Role.Equals("Admin"))
+            throw new InvalidOperationException("Alguma coisa deu errado."); // TODO -> Change it later.
+
+        await _repository.AddUserAsync(newAdmin);
+
+        return _mapper.Map<ReadUser>(newAdmin);
+    }
+
     public async Task<string?> LoginAsync(LoginUser command)
     {
         var user = await _repository.GetSingleUserByEmailAsync(command.Email);
