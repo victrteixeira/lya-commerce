@@ -14,6 +14,7 @@ public class User
     public string FirstName { get; }
     public string LastName { get; }
     public string EmailAddress { get; }
+    public string Role { get; private set; } = "User";
     public string HashedPassword { get; }
     
     public User(string firstname, string lastname, string emailAddress, string hashedPassword)
@@ -23,6 +24,11 @@ public class User
         EmailAddress = emailAddress;
         HashedPassword = hashedPassword;
         ValidateUser();
+    }
+
+    public void UpdateRole(string role)
+    {
+        Role = role;
     }
     
     private void ValidateUser() => new UserValidator().ValidateAndThrow(this);
