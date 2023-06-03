@@ -1,5 +1,6 @@
 ﻿using Commerce.Security.Interfaces;
 using Commerce.Security.Models;
+using Commerce.Security.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,8 +18,8 @@ public class SeedInitial : IHostedService
         var repository = scope.ServiceProvider.GetRequiredService<ISecurityRepository>();
         var pwdService = scope.ServiceProvider.GetRequiredService<IPasswordService>();
         
-        var emailEnv = GetRequiredEnvironmentVariable("DEV_EMAIL");
-        var pwdEnv = GetRequiredEnvironmentVariable("DEV_PASSWORD");
+        var emailEnv = EnvironmentVariable.GetRequiredEnvironmentVariable("DEV_EMAIL");
+        var pwdEnv = EnvironmentVariable.GetRequiredEnvironmentVariable("DEV_PASSWORD");
 
         var encryptedPwd = await pwdService.EncryptPassword(pwdEnv);
         
@@ -32,18 +33,4 @@ public class SeedInitial : IHostedService
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-    
-    private string GetRequiredEnvironmentVariable(string name)
-    {
-        var value = Environment.GetEnvironmentVariable(name);
-        if (string.IsNullOrEmpty(value))
-        {
-            Console.Error.WriteLine($"Environment Variable {name} is not set and it's required. Aborting.");
-            Environment.Exit(-1);
-        }
-
-        return value;
-    }
-
-    
 }
