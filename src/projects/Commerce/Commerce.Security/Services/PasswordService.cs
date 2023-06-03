@@ -13,7 +13,7 @@ public class PasswordService : IPasswordService
 
     private const char SegmentDelimiter = ':';
     
-    public async Task<string> EncryptPassword(string input)
+    public async Task<string> EncryptPasswordAsync(string input)
     {
         byte[] salt = new byte[SaltSize];
         using var rng = RandomNumberGenerator.Create();

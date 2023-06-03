@@ -21,7 +21,7 @@ public class SeedInitial : IHostedService
         var emailEnv = EnvironmentVariable.GetRequiredEnvironmentVariable("DEV_EMAIL");
         var pwdEnv = EnvironmentVariable.GetRequiredEnvironmentVariable("DEV_PASSWORD");
 
-        var encryptedPwd = await pwdService.EncryptPassword(pwdEnv);
+        var encryptedPwd = await pwdService.EncryptPasswordAsync(pwdEnv);
         
         var devUser = new User("Root", "CatMoonMakeUp", emailEnv, encryptedPwd);
         devUser.UpdateRole("Admin");

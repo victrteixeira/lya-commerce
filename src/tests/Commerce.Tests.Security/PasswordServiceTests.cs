@@ -19,7 +19,7 @@ public class PasswordServiceTests
         var pwd = "TestPassword";
         
         // Act
-        var result = await _pwdService.EncryptPassword(pwd);
+        var result = await _pwdService.EncryptPasswordAsync(pwd);
         
         // Assert
         result.Should().NotBeNull();
@@ -33,7 +33,7 @@ public class PasswordServiceTests
         var password = "TestPassword";
         
         // Act
-        var result = await _pwdService.EncryptPassword(password);
+        var result = await _pwdService.EncryptPasswordAsync(password);
         
         // Assert
         result.Should().NotBeNull();
@@ -45,7 +45,7 @@ public class PasswordServiceTests
     {
         // Arrange
         var password = "TestPassword";
-        var hashed = await _pwdService.EncryptPassword(password);
+        var hashed = await _pwdService.EncryptPasswordAsync(password);
 
         // Act
         var result = _pwdService.VerifyHash(password, hashed);
@@ -60,7 +60,7 @@ public class PasswordServiceTests
         // Arrange
         var password = "TestPassword";
         var wrongPassword = "TestPwd";
-        var hash = await _pwdService.EncryptPassword(password);
+        var hash = await _pwdService.EncryptPasswordAsync(password);
         
         // Act
         var result = _pwdService.VerifyHash(wrongPassword, hash);

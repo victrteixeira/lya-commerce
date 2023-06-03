@@ -2,7 +2,7 @@
 
 public interface IPasswordService
 {
-    Task<string> EncryptPassword(string input);
+    Task<string> EncryptPasswordAsync(string input);
     bool VerifyHash(string input, string hashPwd);
     bool ValidatePassword(string pwd);
 }
