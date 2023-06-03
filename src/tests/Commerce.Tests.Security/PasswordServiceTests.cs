@@ -1,5 +1,8 @@
-﻿using Commerce.Security.Services;
+﻿using Commerce.Security.Models;
+using Commerce.Security.Services;
+using Commerce.Security.Utils;
 using FluentAssertions;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Commerce.Tests.Security;
 
@@ -7,13 +10,10 @@ public class PasswordServiceTests
 {
     private readonly PasswordService _pwdService;
 
-    public PasswordServiceTests()
-    {
-        _pwdService = new PasswordService();
-    }
+    public PasswordServiceTests() => _pwdService = new PasswordService();
 
     [Fact]
-    public async Task EncryptPassword_ShouldReturnHashedPassword()
+    public async Task EncryptPasswordAsync_ShouldReturnHashedPassword()
     {
         // Arrange
         var pwd = "TestPassword";
@@ -27,7 +27,7 @@ public class PasswordServiceTests
     }
 
     [Fact]
-    public async Task EncryptPassword_ShouldreturnNonNullString()
+    public async Task EncryptPasswordAsync_ShouldReturnNonNullString()
     {
         // Arrange
         var password = "TestPassword";
@@ -95,5 +95,62 @@ public class PasswordServiceTests
         
         // Assert
         Assert.False(result);
+    }
+
+    [Fact]
+    public async Task UpdatePasswordAsync_UpdatesPassword_WhenEverythingIsCorrect()
+    {
+        // Arrange
+        var oldPwd = "oldPassword@123";
+        var newPwd = "newPassword@123";
+        
+        var oldPwdHash = await _pwdService.EncryptPasswordAsync(oldPwd);
+        var user = new User("sample", "testing", "sampletest@testing.com", oldPwdHash);
+
+        var oldResultHash = _pwdService.VerifyHash(oldPwd, oldPwdHash);
+        
+        // Act
+        var updatedUser = await _pwdService.UpdatePasswordAsync(oldPwd, user, newPwd);
+        var result = _pwdService.VerifyHash(newPwd, updatedUser.HashedPassword);
+        
+        // Assert
+        Assert.True(oldResultHash && result);
+    }
+
+    [Fact]
+    public async Task UpdatePasswordAsync_ShouldThrowException_WhenTheOldPasswordIsIncorrect()
+    {
+        var oldPwd = "oldPassword@123";
+        var oldHash = await _pwdService.EncryptPasswordAsync(oldPwd);
+        var user = new User("sample", "testing", "sampletest@testing.com", oldHash);
+        
+        // Act
+        Func<Task> res = async () =>
+        {
+            var _ = await _pwdService.UpdatePasswordAsync("somethingElse", user, "SomethingNewToPwd123@");
+        };
+        
+        // Assert
+        await res.Should()
+            .ThrowAsync<InvalidPasswordException>()
+            .WithMessage("A senha antiga está incorreta.");
+    }
+
+    [Fact]
+    public async Task UpdatePasswordAsync_ShouldThrowException_WhenThePasswordDoesntPassValidations()
+    {
+        var oldPwd = "oldPassword@123";
+        var oldHash = await _pwdService.EncryptPasswordAsync(oldPwd);
+        var user = new User("sample", "testing", "sampletest@testing.com", oldHash);
+        
+        // Act
+        Func<Task> res = async () =>
+        {
+            var _ = await _pwdService.UpdatePasswordAsync(oldPwd, user, "invalidpwd");
+        };
+        
+        // Assert
+        await res.Should()
+            .ThrowAsync<ValidationException>();
     }
 }

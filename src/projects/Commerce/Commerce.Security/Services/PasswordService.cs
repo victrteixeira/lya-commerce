@@ -79,5 +79,4 @@ public class PasswordService : IPasswordService
 
         return await EncryptPasswordAsync(newPassword);
     }
-    
 }
