@@ -23,6 +23,11 @@ public class SecurityService : ISecurityService
 
     public async Task<ReadUser?> RegisterAsync(CreateUser command)
     {
+        var userExist = await _repository.GetSingleUserByEmailAsync(command.Email);
+
+        if (userExist != null)
+            throw new InvalidOperationException("Um usuário com este e-mail já existe.");
+        
         if (command.Password != command.ConfirmPassword)
             throw new InvalidPasswordException("As senhas não são iguais. Tente novamente.");
 
@@ -31,12 +36,7 @@ public class SecurityService : ISecurityService
                                                " uma letra maiúscula, uma minúscula, um digito númerico," +
                                                " e precisa ser maior ou igual a 8 digitos.");
 
-        var userExist = await _repository.GetSingleUserByEmailAsync(command.Email);
-
-        if (userExist != null)
-            throw new InvalidOperationException("Um usuário com este e-mail já existe.");
-        
-        command.Password = await _pwdService.EncryptPassword(command.Password);
+        command.Password = await _pwdService.EncryptPasswordAsync(command.Password);
         
         var newUser = _mapper.Map<User>(command);
 
@@ -51,8 +51,16 @@ public class SecurityService : ISecurityService
         
         if (userExist != null)
             throw new InvalidOperationException("Um usuário com este e-mail já existe.");
+        
+        if (command.Password != command.ConfirmPassword)
+            throw new InvalidPasswordException("As senhas não são iguais. Tente novamente.");
 
-        command.Password = await _pwdService.EncryptPassword(command.Password);
+        if(!_pwdService.ValidatePassword(command.Password))
+            throw new InvalidPasswordException("Senha não é válida. Precisa conter ao menos" +
+                                               " uma letra maiúscula, uma minúscula, um digito númerico," +
+                                               " e precisa ser maior ou igual a 8 digitos.");
+
+        command.Password = await _pwdService.EncryptPasswordAsync(command.Password);
 
         var newAdmin = _mapper.Map<User>(command);
         newAdmin.UpdateRole("Admin");
