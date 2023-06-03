@@ -14,7 +14,7 @@ public class ProductController : ControllerBase
     public ProductController(IProductRepository repo) => _repo = repo;
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("add")]
     public async Task<IActionResult> Add([FromBody] Product product)
     {
