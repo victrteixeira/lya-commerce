@@ -28,6 +28,8 @@ public static class Container
         services.AddScoped<ISecurityService, SecurityService>();
         services.AddScoped<ITokenService, TokenService>();
 
+        services.AddHostedService<SeedInitial>();
+
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
