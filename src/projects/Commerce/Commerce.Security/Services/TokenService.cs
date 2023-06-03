@@ -14,14 +14,12 @@ public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
 
-    public TokenService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    public TokenService(IConfiguration configuration) => _configuration = configuration;
 
     public string GenerateToken(User user)
     {
-        var encodedKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+        var key = GetRequiredEnvironmentVariable("JWT_KEY");
+        var encodedKey = Encoding.UTF8.GetBytes(key);
 
         if (encodedKey.Length < 32)
             throw new InvalidTokenException("JWT Key must be at least 256 bits long");
@@ -48,12 +46,24 @@ public class TokenService : ITokenService
             }),
             IssuedAt = DateTime.UtcNow,
             NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Jwt:ValidForMinutes"])),
             SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256),
-            Audience = _configuration["Jwt:Audience"],
-            Issuer = _configuration["Jwt:Issuer"]
+            Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Jwt:ValidForMinutes"])),
+            Audience = GetRequiredEnvironmentVariable("JWT_AUDIENCE"),
+            Issuer = GetRequiredEnvironmentVariable("JWT_ISSUER")
         };
 
         return tokenDescriptor;
+    }
+    
+    private string GetRequiredEnvironmentVariable(string name)
+    {
+        var value = Environment.GetEnvironmentVariable(name);
+        if (string.IsNullOrEmpty(value))
+        {
+            Console.Error.WriteLine($"Environment Variable {name} is not set and it's required. Aborting.");
+            Environment.Exit(-1);
+        }
+
+        return value;
     }
 }
