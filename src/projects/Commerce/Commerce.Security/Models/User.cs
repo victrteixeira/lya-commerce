@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using Commerce.Security.Validators;
+﻿using Commerce.Security.Validators;
 using FluentValidation;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -15,7 +14,7 @@ public class User
     public string LastName { get; }
     public string EmailAddress { get; }
     public string Role { get; private set; } = "User";
-    public string HashedPassword { get; }
+    public string HashedPassword { get; private set; }
     
     public User(string firstname, string lastname, string emailAddress, string hashedPassword)
     {
@@ -29,6 +28,11 @@ public class User
     public void UpdateRole(string role)
     {
         Role = role;
+    }
+
+    public void UpdateHash(string hash)
+    {
+        HashedPassword = hash;
     }
     
     private void ValidateUser() => new UserValidator().ValidateAndThrow(this);
