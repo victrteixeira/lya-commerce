@@ -87,4 +87,20 @@ public class SecurityService : ISecurityService
 
         return _tokenRequest.GenerateToken(user);
     }
+
+    public async Task<bool> ChangePasswordAsync(ChangePasswordUser command)
+    {
+        var user = await _repository.GetSingleUserByEmailAsync(command.Email);
+        if (user == null)
+            throw new KeyNotFoundException("Não existe usuário cadastrado com este e-mail.");
+
+        if (user.Id == null)
+            throw new ArgumentNullException();
+
+        var userPwdChanged = await _pwdService.UpdatePasswordAsync(command.OldPassword, user, command.NewPassword);
+        
+        await _repository.UpdateUserAsync(user.Id, userPwdChanged);
+
+        return true;
+    }
 }
