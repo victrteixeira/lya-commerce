@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
+using Commerce.Security.Helpers.Exceptions;
 using Commerce.Security.Interfaces;
 using Commerce.Security.Models;
-using Commerce.Security.Utils;
 using FluentValidation;
 
 namespace Commerce.Security.Services;

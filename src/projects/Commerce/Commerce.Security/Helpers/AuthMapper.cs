@@ -2,7 +2,7 @@
 using Commerce.Security.DTOs;
 using Commerce.Security.Models;
 
-namespace Commerce.Security.Utils;
+namespace Commerce.Security.Helpers;
 
 public class AuthMapper : Profile
 {

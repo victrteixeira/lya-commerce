@@ -1,4 +1,4 @@
-﻿namespace Commerce.Security.Utils;
+﻿namespace Commerce.Security.Helpers;
 
 public static class EnvironmentVariable
 {

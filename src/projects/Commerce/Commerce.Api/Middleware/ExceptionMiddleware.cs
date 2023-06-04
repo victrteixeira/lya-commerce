@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using Commerce.Api.Utils;
-using Commerce.Security.Utils;
+using Commerce.Security.Helpers.Exceptions;
 using FluentValidation;
 using SharpCompress.Common;
 

@@ -1,6 +1,6 @@
-﻿using Commerce.Security.Models;
+﻿using Commerce.Security.Helpers.Exceptions;
+using Commerce.Security.Models;
 using Commerce.Security.Services;
-using Commerce.Security.Utils;
 using FluentAssertions;
 using ValidationException = FluentValidation.ValidationException;
 

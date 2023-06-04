@@ -1,6 +1,6 @@
-﻿using Commerce.Security.Interfaces;
+﻿using Commerce.Security.Helpers;
+using Commerce.Security.Interfaces;
 using Commerce.Security.Models;
-using Commerce.Security.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

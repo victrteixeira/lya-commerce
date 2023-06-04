@@ -1,10 +1,11 @@
 ﻿using System.Text;
 using System.Security.Claims;
-using Commerce.Security.Utils;
 using Commerce.Security.Models;
 using Commerce.Security.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Commerce.Security.Helpers;
+using Commerce.Security.Helpers.Exceptions;
 using Microsoft.Extensions.Configuration;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 

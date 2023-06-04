@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Commerce.Security.DTOs;
+using Commerce.Security.Helpers.Exceptions;
 using Commerce.Security.Interfaces;
 using Commerce.Security.Models;
-using Commerce.Security.Utils;
 
 namespace Commerce.Security.Services;
 
