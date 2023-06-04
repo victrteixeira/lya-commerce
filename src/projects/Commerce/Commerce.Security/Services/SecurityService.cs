@@ -11,13 +11,15 @@ public class SecurityService : ISecurityService
     private readonly ISecurityRepository _repository;
     private readonly IPasswordService _pwdService;
     private readonly ITokenService _tokenRequest;
+    private readonly IEmailService _emailService;
 
-    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenService tokenRequest)
+    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenService tokenRequest, IEmailService emailService)
     {
         _mapper = mapper;
         _repository = repository;
         _pwdService = pwdService;
         _tokenRequest = tokenRequest;
+        _emailService = emailService;
     }
 
     public async Task<ReadUser?> RegisterAsync(CreateUser command)
@@ -30,9 +32,17 @@ public class SecurityService : ISecurityService
             throw new InvalidOperationException("Um usuário com este e-mail já existe.");
         }
         await _repository.AddUserAsync(newUser);
+
+        await _emailService.SendEmailConfirmationAsync(command.Email, "adsjlkjkasd");
+
         return _mapper.Map<ReadUser>(newUser);
     }
 
+    public async Task<bool> ConfirmEmailAsync(string token)
+    {
+        return true;
+    }
+    
     public async Task<string?> LoginAsync(LoginUser command)
     {
         var user = await GetUser(command.Email, IdentifierType.Email);

@@ -27,6 +27,7 @@ public static class Container
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<ISecurityService, SecurityService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         services.AddHostedService<SeedInitial>();
 
