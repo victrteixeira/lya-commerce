@@ -26,17 +26,6 @@ public class SecurityController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
-    [Route("register/admin")]
-    public async Task<IActionResult> RegisterAdmin([FromBody] CreateUser command)
-    {
-        var serviceResponse = await _service.RegisterAdminAsync(command);
-        var apiResponse = ApiResponse<ReadUser>.Success(serviceResponse, "Usuário cadastrado com sucesso.");
-
-        return Ok(apiResponse);
-    }
-
-    [HttpPost]
     [AllowAnonymous]
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginUser command)
