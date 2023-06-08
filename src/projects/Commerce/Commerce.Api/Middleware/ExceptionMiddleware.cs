@@ -40,34 +40,42 @@ public class ExceptionMiddleware
         {
             case ValidationException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Logger.LogWarning("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case InvalidPasswordException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Logger.LogWarning("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case InvalidOperationException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Logger.LogWarning("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case KeyNotFoundException:
                 response.StatusCode = (int)HttpStatusCode.NotFound;
+                Logger.LogWarning("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case UnauthorizedAccessException:
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                Logger.LogWarning("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case ArgumentNullException:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Logger.LogCritical("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case InvalidTokenException:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Logger.LogCritical("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             case CryptographicException:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Logger.LogCritical("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
             default:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Logger.LogCritical("{Type}: {ErrorMessage}", error.GetType(), error.Message);
                 break;
         }
         
-        Logger.LogError("{Type}: {ErrorMessage}\\n{ErrorStackTrace}", error.GetType(), error.Message, error.StackTrace);
         var result = JsonSerializer.Serialize(responseModel);
         await context.Response.WriteAsync(result);
     }
