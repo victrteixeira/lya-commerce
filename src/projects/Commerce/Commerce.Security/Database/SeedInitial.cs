@@ -21,10 +21,10 @@ public class SeedInitial : IHostedService
         var emailEnv = EnvironmentVariable.GetRequiredEnvironmentVariable("DEV_EMAIL");
         var pwdEnv = EnvironmentVariable.GetRequiredEnvironmentVariable("DEV_PASSWORD");
 
-        var encryptedPwd = await pwdService.EncryptPasswordAsync(pwdEnv);
+        var encryptedPwd = pwdService.HashPassword(pwdEnv);
         
         var devUser = new User("Root", "CatMoonMakeUp", emailEnv, encryptedPwd);
-        devUser.UpdateRole("Admin");
+        devUser.Role = "Admin";
         
         if (await repository.GetSingleUserByEmailAsync(emailEnv) == null)
         {
