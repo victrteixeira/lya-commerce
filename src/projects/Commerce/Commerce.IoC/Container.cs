@@ -30,6 +30,10 @@ public static class Container
 
         services.AddHostedService<SeedInitial>();
 
+        var key = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_KEY");
+        var audience = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_AUDIENCE");
+        var issuer = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_ISSUER");
+        
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,9 +42,9 @@ public static class Container
         {
             jwt.TokenValidationParameters = new TokenValidationParameters
             {
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
-                ValidIssuer = configuration["Jwt:Issuer"],
-                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                ValidIssuer = issuer,
+                ValidAudience = audience,
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
