@@ -10,11 +10,11 @@ public class User
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; private set; }
-    public string FirstName { get; }
-    public string LastName { get; }
-    public string EmailAddress { get; }
-    public string Role { get; private set; } = "User";
-    public string HashedPassword { get; private set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string EmailAddress { get; set; }
+    public string Role { get; set; } = "User";
+    public string HashedPassword { get; set; }
     
     public User(string firstname, string lastname, string emailAddress, string hashedPassword)
     {
@@ -25,15 +25,5 @@ public class User
         ValidateUser();
     }
 
-    public void UpdateRole(string role)
-    {
-        Role = role;
-    }
-
-    public void UpdateHash(string hash)
-    {
-        HashedPassword = hash;
-    }
-    
     private void ValidateUser() => new UserValidator().ValidateAndThrow(this);
 }

@@ -1,4 +1,4 @@
-﻿namespace Commerce.Security.Utils;
+﻿namespace Commerce.Security.Helpers.Exceptions;
 
 public class InvalidTokenException : Exception
 {

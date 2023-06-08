@@ -16,7 +16,12 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7217;http://localhost:5259",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DEV_EMAIL": "root@root.com.br",
+        "DEV_PASSWORD": "root@Root123",
+        "JWT_KEY": "e55cbc81bf3e2e3fd58b5908a4f567acb1235f9fa9b319619be2246903acd8d7",
+        "JWT_AUDIENCE": "Commerce",
+        "JWT_ISSUER": "CommerceSecure"
       }
     },
     "IIS Express": {
