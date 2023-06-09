@@ -19,6 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DEV_EMAIL": "root@root.com.br",
         "DEV_PASSWORD": "root@Root123",
+        "EMAIL_KEY": "d6f1a93b4986bb38b61fb9cef80e0c48cbd9ec81f1109eea0954dba6812e1937",
         "JWT_KEY": "e55cbc81bf3e2e3fd58b5908a4f567acb1235f9fa9b319619be2246903acd8d7",
         "JWT_AUDIENCE": "Commerce",
         "JWT_ISSUER": "CommerceSecure"

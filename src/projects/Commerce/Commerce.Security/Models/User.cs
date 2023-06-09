@@ -13,6 +13,7 @@ public class User
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string EmailAddress { get; set; }
+    public bool EmailConfirmed { get; set; } = false;
     public string Role { get; set; } = "User";
     public string HashedPassword { get; set; }
     

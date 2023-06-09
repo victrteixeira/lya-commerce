@@ -25,6 +25,22 @@ public class SecurityController : ControllerBase
         return Ok(apiResponse);
     }
 
+    [HttpGet]
+    [AllowAnonymous]
+    [Route("confirm")]
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
+    {
+        if (string.IsNullOrEmpty(token))
+        {
+            return BadRequest("A token must be supplied for email confirmation.");
+        }
+
+        var response = await _service.ConfirmEmailAsync(token);
+        var apiResponse =
+            ApiResponse<bool>.Success(response, "E-mail confirmado com sucesso, você pode realizar o login agora!");
+        return Ok(apiResponse);
+    }
+
     [HttpPost]
     [AllowAnonymous]
     [Route("login")]
