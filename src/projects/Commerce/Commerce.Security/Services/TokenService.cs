@@ -23,7 +23,9 @@ public class TokenService : ITokenService
         var encodedKey = Encoding.UTF8.GetBytes(key);
 
         if (encodedKey.Length < 32)
-            throw new InvalidTokenException("JWT Key must be at least 256 bits long");
+        {
+            throw new InvalidTokenException("JWT Key must be at least 256 bits long.");
+        }
 
         var securityKey = new SymmetricSecurityKey(encodedKey);
         var tokenDescriptor = CreateTokenDescriptor(user, securityKey);
@@ -32,6 +34,39 @@ public class TokenService : ITokenService
         var previewToken = jwtTokenHandler.CreateToken(tokenDescriptor);
         var token = jwtTokenHandler.WriteToken(previewToken);
         return token;
+    }
+
+    public string GenerateEmailToken(User user)
+    {
+        var key = EnvironmentVariable.GetRequiredEnvironmentVariable("EMAIL_KEY");
+        var encodedKey = Encoding.UTF8.GetBytes(key);
+
+        if (encodedKey.Length < 32)
+        {
+            throw new InvalidTokenException("The Email Key must be at least 256 bits long.");
+        }
+
+        var securityKey = new SymmetricSecurityKey(encodedKey);
+        var tokenDescriptor = CreateEmailTokenDescriptor(user, securityKey);
+
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var emailToken = jwtTokenHandler.CreateToken(tokenDescriptor);
+        var token = jwtTokenHandler.WriteToken(emailToken);
+        return token;
+    }
+
+    public string ExtractEmailClaim(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var secToken = tokenHandler.ReadJwtToken(token);
+
+        string? email = secToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+        if (email is null)
+        {
+            throw new InvalidTokenException("O token não é válido.");
+        }
+        
+        return email;
     }
 
     private SecurityTokenDescriptor CreateTokenDescriptor(User user, SymmetricSecurityKey securityKey)
@@ -48,9 +83,24 @@ public class TokenService : ITokenService
             IssuedAt = DateTime.UtcNow,
             NotBefore = DateTime.UtcNow,
             SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256),
-            Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Jwt:ValidForMinutes"])),
+            Expires = DateTime.UtcNow.AddMinutes(10),
             Audience = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_AUDIENCE"),
             Issuer = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_ISSUER")
+        };
+
+        return tokenDescriptor;
+    }
+
+    private SecurityTokenDescriptor CreateEmailTokenDescriptor(User user, SymmetricSecurityKey securityKey)
+    {
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim("email", user.EmailAddress),
+            }),
+            Expires = DateTime.UtcNow.AddMinutes(10),
+            SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
         };
 
         return tokenDescriptor;

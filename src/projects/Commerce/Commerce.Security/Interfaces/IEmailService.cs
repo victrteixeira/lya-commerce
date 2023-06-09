@@ -1,6 +1,8 @@
-﻿namespace Commerce.Security.Interfaces;
+﻿using Commerce.Security.Models;
+
+namespace Commerce.Security.Interfaces;
 
 public interface IEmailService
 {
-    Task SendEmailConfirmationAsync(string email, string token);
+    Task SendEmailConfirmationAsync(User user, string token);
 }

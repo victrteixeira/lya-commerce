@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Commerce.Security.DTOs;
+using Commerce.Security.Helpers.Exceptions;
 using Commerce.Security.Interfaces;
 using Commerce.Security.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Commerce.Security.Services;
 
@@ -12,14 +14,16 @@ public class SecurityService : ISecurityService
     private readonly IPasswordService _pwdService;
     private readonly ITokenService _tokenRequest;
     private readonly IEmailService _emailService;
+    private readonly IMemoryCache _cache;
 
-    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenService tokenRequest, IEmailService emailService)
+    public SecurityService(IMapper mapper, ISecurityRepository repository, IPasswordService pwdService, ITokenService tokenRequest, IEmailService emailService, IMemoryCache cache)
     {
         _mapper = mapper;
         _repository = repository;
         _pwdService = pwdService;
         _tokenRequest = tokenRequest;
         _emailService = emailService;
+        _cache = cache;
     }
 
     public async Task<ReadUser?> RegisterAsync(CreateUser command)
@@ -27,25 +31,41 @@ public class SecurityService : ISecurityService
         var newUser = _mapper.Map<User>(command);
         newUser.HashedPassword = _pwdService.HashPassword(command.Password);
        
-        if (await GetUser(command.Email, IdentifierType.Email) != null)
+        if (await GetUserAsync(command.Email, IdentifierType.Email) != null)
         {
             throw new InvalidOperationException("Um usuário com este e-mail já existe.");
         }
         await _repository.AddUserAsync(newUser);
 
-        await _emailService.SendEmailConfirmationAsync(command.Email, "adsjlkjkasd");
+        var emailToken = _tokenRequest.GenerateEmailToken(newUser);
+
+        await _emailService.SendEmailConfirmationAsync(newUser, emailToken);
 
         return _mapper.Map<ReadUser>(newUser);
     }
 
     public async Task<bool> ConfirmEmailAsync(string token)
     {
+        if (!_cache.TryGetValue(token, out _))
+        {
+            throw new UnauthorizedAccessException("Token não válido ou não existe.");
+        }
+
+        string? email = _tokenRequest.ExtractEmailClaim(token);
+        if (email is null)
+        {
+            throw new InvalidTokenException(nameof(token));
+        }
+
+        var user = await GetUserAsync(email, IdentifierType.Email);
+        await SetEmailConfirmedAsync(user!);
+        _cache.Remove(token);
         return true;
     }
     
     public async Task<string?> LoginAsync(LoginUser command)
     {
-        var user = await GetUser(command.Email, IdentifierType.Email);
+        var user = await GetUserAsync(command.Email, IdentifierType.Email);
         if (user is null)
         {
             throw new KeyNotFoundException("Usuário não encontrado para esta e-mail, tente realizar um cadastro.");
@@ -57,12 +77,17 @@ public class SecurityService : ISecurityService
             throw new UnauthorizedAccessException("E-mail ou Senha incorretos.");
         }
 
+        if (user.EmailConfirmed == false)
+        {
+            throw new UnauthorizedAccessException("Você precisa confirmar o seu e-mail.");
+        }
+
         return _tokenRequest.GenerateToken(user);
     }
 
     public async Task<bool> ChangePasswordAsync(ChangePasswordUser command)
     {
-        var user = await GetUser(command.Email, IdentifierType.Email);
+        var user = await GetUserAsync(command.Email, IdentifierType.Email);
         if (user == null || user.Id is null)
         {
             throw new KeyNotFoundException("Não existe usuário cadastrado com este e-mail.");
@@ -75,19 +100,29 @@ public class SecurityService : ISecurityService
         return true;
     }
 
-    private async Task<User?> GetUser(string method, IdentifierType type)
+    private async Task<User?> GetUserAsync(string method, IdentifierType type)
     {
         switch (type)
         {
             case IdentifierType.Email:
-                var userByEmail = await _repository.GetSingleUserByEmailAsync(method);
-                return userByEmail;
+                return await _repository.GetSingleUserByEmailAsync(method);
             case IdentifierType.Id:
-                var userBydId = await _repository.GetSingleUserAsync(method);
-                return userBydId;
+                return await _repository.GetSingleUserAsync(method);
             default:
                 return null;
         }
+    }
+
+    private Task SetEmailConfirmedAsync(User user)
+    {
+        if (user is null || user.Id is null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
+        user.EmailConfirmed = true;
+        _repository.UpdateUserAsync(user.Id, user);
+        return Task.CompletedTask;
     }
 
     private enum IdentifierType
