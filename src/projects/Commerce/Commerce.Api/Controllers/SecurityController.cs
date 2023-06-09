@@ -28,7 +28,7 @@ public class SecurityController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     [Route("confirm")]
-    public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string? token)
     {
         if (string.IsNullOrEmpty(token))
         {
@@ -54,12 +54,39 @@ public class SecurityController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "User,Admin,Developer")]
-    [Route("changePassword")]
+    [Route("password/change")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUser command)
     {
         await _service.ChangePasswordAsync(command);
         var apiResponse =
             ApiResponse<string>.Success(null, "Senha atualizada com sucesso.");
+        return Ok(apiResponse);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [Route("password/request")]
+    public async Task<IActionResult> ForgotPasswordRequest([FromBody] string? email)
+    {
+        await _service.ForgotPasswordRequest(email);
+        var apiResponse =
+            ApiResponse<string>.Success(null, "E-mail de recuperação de senha enviado com sucesso.");
+        return Ok(apiResponse);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [Route("forgot/recovery")]
+    public async Task<IActionResult> PasswordRecovery([FromQuery] string? token, [FromBody] ResetPasswordUser command)
+    {
+        if (string.IsNullOrEmpty(token))
+        {
+            return BadRequest("A token must be supplied for password recovery.");
+        }
+
+        await _service.PasswordRecovery(token, command);
+        var apiResponse = 
+            ApiResponse<string>.Success(null, "Senha alterada com sucesso.");
         return Ok(apiResponse);
     }
 }
