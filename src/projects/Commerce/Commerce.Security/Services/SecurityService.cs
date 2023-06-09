@@ -132,6 +132,22 @@ public class SecurityService : ISecurityService
         return true;
     }
 
+    public async Task DeleteUserAsync(string id)
+    {
+        var user = await GetUserAsync(id, IdentifierType.Id);
+        if (user is null || user.Id is null)
+        {
+            throw new KeyNotFoundException("Este usuário não existe.");
+        }
+
+        await _repository.DeleteUserAsync(user.Id);
+    }
+
+    public async Task<IReadOnlyCollection<User>> GetAllUsersAsync()
+    {
+        return await _repository.GetAllUsers();
+    }
+
     private async Task<User?> GetUserAsync(string method, IdentifierType type)
     {
         switch (type)

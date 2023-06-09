@@ -1,4 +1,5 @@
 ﻿using Commerce.Security.DTOs;
+using Commerce.Security.Models;
 
 namespace Commerce.Security.Interfaces;
 
@@ -10,4 +11,6 @@ public interface ISecurityService
     Task<bool> ChangePasswordAsync(ChangePasswordUser command);
     Task ForgotPasswordRequest(string? email);
     Task<bool> PasswordRecovery(string token, ResetPasswordUser command);
+    Task DeleteUserAsync(string id);
+    Task<IReadOnlyCollection<User>> GetAllUsersAsync();
 }

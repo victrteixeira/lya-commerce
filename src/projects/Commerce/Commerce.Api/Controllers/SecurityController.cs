@@ -1,6 +1,7 @@
 ﻿using Commerce.Api.Utils;
 using Commerce.Security.DTOs;
 using Commerce.Security.Interfaces;
+using Commerce.Security.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ public class SecurityController : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
-    [Route("register")]
+    [Route("user/register")]
     public async Task<IActionResult> Register([FromBody] CreateUser command)
     {
         var serviceResponse = await _service.RegisterAsync(command);
@@ -27,7 +28,7 @@ public class SecurityController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    [Route("confirm")]
+    [Route("user/email-confirm")]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string? token)
     {
         if (string.IsNullOrEmpty(token))
@@ -43,7 +44,7 @@ public class SecurityController : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
-    [Route("login")]
+    [Route("user/login")]
     public async Task<IActionResult> Login([FromBody] LoginUser command)
     {
         var response = await _service.LoginAsync(command);
@@ -57,9 +58,9 @@ public class SecurityController : ControllerBase
     [Route("password/change")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUser command)
     {
-        await _service.ChangePasswordAsync(command);
+        var response = await _service.ChangePasswordAsync(command);
         var apiResponse =
-            ApiResponse<string>.Success(null, "Senha atualizada com sucesso.");
+            ApiResponse<bool>.Success(response, "Senha atualizada com sucesso.");
         return Ok(apiResponse);
     }
 
@@ -76,7 +77,7 @@ public class SecurityController : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
-    [Route("forgot/recovery")]
+    [Route("password/recovery")]
     public async Task<IActionResult> PasswordRecovery([FromQuery] string? token, [FromBody] ResetPasswordUser command)
     {
         if (string.IsNullOrEmpty(token))
@@ -84,9 +85,30 @@ public class SecurityController : ControllerBase
             return BadRequest("A token must be supplied for password recovery.");
         }
 
-        await _service.PasswordRecovery(token, command);
+        var response = await _service.PasswordRecovery(token, command);
         var apiResponse = 
-            ApiResponse<string>.Success(null, "Senha alterada com sucesso.");
+            ApiResponse<bool>.Success(response, "Senha alterada com sucesso.");
+        return Ok(apiResponse);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin,Developer")]
+    [Route("user/get-all")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var response = await _service.GetAllUsersAsync();
+        var apiResponse =
+            ApiResponse<IReadOnlyCollection<User>>.Success(response, null);
+        return Ok(apiResponse);
+    }
+
+    [HttpDelete]
+    [Authorize(Roles = "Admin,Developer")]
+    [Route("user/delete/{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        await _service.DeleteUserAsync(id);
+        var apiResponse = ApiResponse<bool>.Success(true, "Usuário removido com sucesso.");
         return Ok(apiResponse);
     }
 }

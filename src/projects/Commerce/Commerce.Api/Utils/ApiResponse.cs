@@ -9,6 +9,6 @@ public class ApiResponse<T>
     public static ApiResponse<T> Fail(string errorMessage) => new ApiResponse<T>
         { Succeeded = false, Message = errorMessage };
 
-    public static ApiResponse<T> Success(T? data, string successMessage) => new ApiResponse<T>
+    public static ApiResponse<T> Success(T? data, string? successMessage) => new ApiResponse<T>
         { Data = data, Succeeded = true, Message = successMessage };
 }
