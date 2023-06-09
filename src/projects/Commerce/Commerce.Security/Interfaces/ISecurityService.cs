@@ -8,4 +8,6 @@ public interface ISecurityService
     Task<bool> ConfirmEmailAsync(string token);
     Task<string?> LoginAsync(LoginUser command);
     Task<bool> ChangePasswordAsync(ChangePasswordUser command);
+    Task ForgotPasswordRequest(string? email);
+    Task<bool> PasswordRecovery(string token, ResetPasswordUser command);
 }

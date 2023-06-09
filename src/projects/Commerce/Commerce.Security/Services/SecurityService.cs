@@ -100,6 +100,38 @@ public class SecurityService : ISecurityService
         return true;
     }
 
+    public async Task ForgotPasswordRequest(string? email)
+    {
+        if (email is null)
+        {
+            throw new ArgumentException();
+        }
+        var user = await GetUserAsync(email, IdentifierType.Email);
+        if (user is null)
+        {
+            throw new KeyNotFoundException("Não há nenhum usuário registrado para este e-mail.");
+        }
+
+        var token = _tokenRequest.GenerateEmailToken(user);
+        await _emailService.SendEmailForgotPasswordAsync(user, token);
+    }
+
+    public async Task<bool> PasswordRecovery(string token, ResetPasswordUser command)
+    {
+        var userIdentifier = _tokenRequest.ExtractEmailClaim(token);
+        var user = await GetUserAsync(userIdentifier, IdentifierType.Email);
+        if (user is null || user.Id is null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        var newHash = _pwdService.HashPassword(command.Password);
+        user.HashedPassword = newHash;
+
+        await _repository.UpdateUserAsync(user.Id, user);
+        return true;
+    }
+
     private async Task<User?> GetUserAsync(string method, IdentifierType type)
     {
         switch (type)
