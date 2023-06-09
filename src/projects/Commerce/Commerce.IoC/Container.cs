@@ -30,6 +30,7 @@ public static class Container
         services.AddScoped<IEmailService, EmailService>();
 
         services.AddHostedService<SeedInitial>();
+        services.AddMemoryCache();
 
         var key = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_KEY");
         var audience = EnvironmentVariable.GetRequiredEnvironmentVariable("JWT_AUDIENCE");
