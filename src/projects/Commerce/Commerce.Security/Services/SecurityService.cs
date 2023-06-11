@@ -35,11 +35,11 @@ public class SecurityService : ISecurityService
         {
             throw new InvalidOperationException("Um usuário com este e-mail já existe.");
         }
-        await _repository.AddUserAsync(newUser);
 
         var emailToken = _tokenRequest.GenerateEmailToken(newUser);
-
         await _emailService.SendEmailConfirmationAsync(newUser, emailToken);
+        
+        await _repository.AddUserAsync(newUser);
 
         return _mapper.Map<ReadUser>(newUser);
     }
