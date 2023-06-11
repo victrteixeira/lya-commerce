@@ -57,7 +57,7 @@ public class EmailService : IEmailService
         emailMessage.To.Add(new MailboxAddress($"{user.FirstName} {user.LastName}", user.EmailAddress));
         emailMessage.Subject = "Confirm you email";
         
-        string confirmationLink = $"https://localhost:7217/api/v1/security/forgot/request?token={token}";
+        string confirmationLink = $"https://localhost:7217/api/v1/security/password/recovery?token={token}";
         emailMessage.Body = new TextPart("plain")
         {
             Text = $"Please confirm your account by clicking this link: {confirmationLink}"
