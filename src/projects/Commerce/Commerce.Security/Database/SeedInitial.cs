@@ -25,6 +25,7 @@ public class SeedInitial : IHostedService
         
         var devUser = new User("Root", "CatMoonMakeUp", emailEnv, encryptedPwd);
         devUser.Role = "Admin";
+        devUser.EmailConfirmed = true;
         
         if (await repository.GetSingleUserByEmailAsync(emailEnv) == null)
         {
