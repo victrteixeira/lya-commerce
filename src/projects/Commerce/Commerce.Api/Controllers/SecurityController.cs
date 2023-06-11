@@ -26,7 +26,7 @@ public class SecurityController : ControllerBase
         return Ok(apiResponse);
     }
 
-    [HttpGet]
+    [HttpPatch]
     [AllowAnonymous]
     [Route("user/email-confirm")]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string? token)
@@ -53,7 +53,7 @@ public class SecurityController : ControllerBase
         return Ok(apiResponse);
     }
 
-    [HttpPost]
+    [HttpPatch]
     [Authorize(Roles = "User,Admin,Developer")]
     [Route("password/change")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUser command)
@@ -75,7 +75,7 @@ public class SecurityController : ControllerBase
         return Ok(apiResponse);
     }
 
-    [HttpPost]
+    [HttpPatch]
     [AllowAnonymous]
     [Route("password/recovery")]
     public async Task<IActionResult> PasswordRecovery([FromQuery] string? token, [FromBody] ResetPasswordUser command)
@@ -108,7 +108,6 @@ public class SecurityController : ControllerBase
     public async Task<IActionResult> DeleteUser(string id)
     {
         await _service.DeleteUserAsync(id);
-        var apiResponse = ApiResponse<bool>.Success(true, "Usuário removido com sucesso.");
-        return Ok(apiResponse);
+        return NoContent();
     }
 }
